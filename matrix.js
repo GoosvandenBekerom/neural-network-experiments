@@ -24,7 +24,7 @@ module.exports = class Matrix {
   randomize() {
     for (let row = 0; row < this.rows; row++)
       for (let col = 0; col < this.columns; col++)
-        this.data[row][col] = Math.floor(Math.random()*10)
+        this.data[row][col] = Math.random()*2-1
   }
 
   add(value) {
