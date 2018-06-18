@@ -7,21 +7,24 @@ const operators = {
 
 module.exports = class Matrix {
   constructor(rows, columns) {
+    if (!rows || !columns) {
+      console.error("FATAL: Cannot initialize matrix, make sure to specify amount of rows and columns.")
+    }
     this.rows = rows
     this.columns = columns
-    this.matrix = new Array(this.rows)
+    this.data = new Array(this.rows)
 
     for (let row = 0; row < this.rows; row++) {
-      this.matrix[row] = new Array(this.columns)
+      this.data[row] = new Array(this.columns)
       for (let col = 0; col < this.columns; col++)
-        this.matrix[row][col] = 0
+        this.data[row][col] = 0
     }
   }
 
   randomize() {
     for (let row = 0; row < this.rows; row++)
       for (let col = 0; col < this.columns; col++)
-        this.matrix[row][col] = Math.floor(Math.random()*10)
+        this.data[row][col] = Math.floor(Math.random()*10)
   }
 
   add(value) {
@@ -44,9 +47,15 @@ module.exports = class Matrix {
     const result = new Matrix(this.columns, this.rows)
     for (let row = 0; row < this.rows; row++)
       for (let col = 0; col < this.columns; col++)
-        result.matrix[col][row] = this.matrix[row][col]
+        result.data[col][row] = this.data[row][col]
     
     return result
+  }
+
+  map(fn) {
+    for (let row = 0; row < this.rows; row++)
+      for (let col = 0; col < this.columns; col++)
+        this.data[row][col] = fn(this.data[row][col])
   }
 
   _operation(operator, value) {
@@ -57,7 +66,7 @@ module.exports = class Matrix {
   _scalarOperation(op, n) {
     for (let row = 0; row < this.rows; row++)
       for (let col = 0; col < this.columns; col++)
-        this.matrix[row][col] = operators[op](this.matrix[row][col], n)
+        this.data[row][col] = operators[op](this.data[row][col], n)
   }
 
   _elementWiseOperation(op, other) {
@@ -68,7 +77,7 @@ module.exports = class Matrix {
 
     for (let row = 0; row < this.rows; row++)
       for (let col = 0; col < this.columns; col++)
-        this.matrix[row][col] = operators[op](this.matrix[row][col], other.matrix[row][col])
+        this.data[row][col] = operators[op](this.data[row][col], other.matrix[row][col])
   }
   
   static product(a, b) {
@@ -82,7 +91,7 @@ module.exports = class Matrix {
     for (let row = 0; row < product.rows; row++)
       for (let col = 0; col < product.columns; col++)
         for (let current = 0; current < a.columns; current++)
-          product.matrix[row][col] += a.matrix[row][current] * b.matrix[current][col]
+          product.data[row][col] += a.matrix[row][current] * b.matrix[current][col]
 
     return product
   }
@@ -90,7 +99,7 @@ module.exports = class Matrix {
   print() {
     let output = 'Matrix:\n'
     for (let row = 0; row < this.rows; row++)
-      output += `\t${this.matrix[row]}\n`
+      output += `\t${this.data[row]}\n`
     console.log(output)
   }
 }
