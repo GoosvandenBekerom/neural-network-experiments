@@ -21,6 +21,22 @@ module.exports = class Matrix {
     }
   }
 
+  static fromArray(arr) {
+    let m = new Matrix(arr.length, 1)
+    for (let i = 0; i < m.rows; i++)
+      m.data[i][0] = arr[i]
+    return m
+  }
+
+  toArray() {
+    let arr = new Array(this.rows * this.columns)
+    let index = 0
+    for (let row = 0; row < this.rows; row++)
+      for (let col = 0; col < this.columns; col++)
+        arr[index++] = this.data[row][col]
+    return arr
+  }
+
   randomize() {
     for (let row = 0; row < this.rows; row++)
       for (let col = 0; col < this.columns; col++)
@@ -77,12 +93,12 @@ module.exports = class Matrix {
 
     for (let row = 0; row < this.rows; row++)
       for (let col = 0; col < this.columns; col++)
-        this.data[row][col] = operators[op](this.data[row][col], other.matrix[row][col])
+        this.data[row][col] = operators[op](this.data[row][col], other.data[row][col])
   }
   
   static product(a, b) {
-    if (a.rows !== b.columns || a.columns !== b.rows) {
-      console.error('FATAL: Matrix product operation is only allowed on matrices where a.rows == b.columns and a.columns == b.rows (e.g. [2,3] && [3,2]).')
+    if (a.columns !== b.rows) {
+      console.error(`FATAL: Matrix product operation expects a\'s columns and b\'s rows to be of equal length. (actual a: ${a.columns} b: ${b.rows})`)
       return
     }
 
@@ -91,7 +107,7 @@ module.exports = class Matrix {
     for (let row = 0; row < product.rows; row++)
       for (let col = 0; col < product.columns; col++)
         for (let current = 0; current < a.columns; current++)
-          product.data[row][col] += a.matrix[row][current] * b.matrix[current][col]
+          product.data[row][col] += a.data[row][current] * b.data[current][col]
 
     return product
   }
