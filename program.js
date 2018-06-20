@@ -22,10 +22,10 @@ function init() {
     }
   }
 
-  const o00 = brain.feedforward([0, 0]).print()
-  const o11 = brain.feedforward([1, 1]).print()
-  const o01 = brain.feedforward([0, 1]).print()
-  const o10 = brain.feedforward([1, 0]).print()
+  brain.feedforward([0, 0]).print()
+  brain.feedforward([1, 1]).print()
+  brain.feedforward([0, 1]).print()
+  brain.feedforward([1, 0]).print()
 }
 
 function update() {
