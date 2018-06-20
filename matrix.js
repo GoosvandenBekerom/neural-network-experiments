@@ -59,6 +59,12 @@ module.exports = class Matrix {
     this._operation('*', value)
   }
 
+  static subtract(matrix, other) {
+    const result = matrix.clone()
+    result.subtract(other)
+    return result
+  }
+
   transpose() {
     const result = new Matrix(this.columns, this.rows)
     for (let row = 0; row < this.rows; row++)
@@ -72,6 +78,14 @@ module.exports = class Matrix {
     for (let row = 0; row < this.rows; row++)
       for (let col = 0; col < this.columns; col++)
         this.data[row][col] = fn(this.data[row][col])
+  }
+
+  static map(matrix, fn) {
+    const result = new Matrix(matrix.rows, matrix.columns)
+    for (let row = 0; row < matrix.rows; row++)
+      for (let col = 0; col < matrix.columns; col++)
+        result.data[row][col] = fn(matrix.data[row][col])
+    return result
   }
 
   _operation(operator, value) {
@@ -117,5 +131,11 @@ module.exports = class Matrix {
     for (let row = 0; row < this.rows; row++)
       output += `\t${this.data[row]}\n`
     console.log(output)
+  }
+
+  clone() {
+    const clone = new Matrix(this.rows, this.columns)
+    clone.data = this.data
+    return clone
   }
 }
